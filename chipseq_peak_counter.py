@@ -52,14 +52,14 @@ def main():
     name      = os.path.splitext(sys.argv[1])[0]
     ext       = os.path.splitext(sys.argv[1])[1]
     datafile  = name + ext
-    chr_names = list(np.loadtxt(datafile, delimiter=',', \
-                                 usecols=(0,), skiprows=16, dtype=str))
+    chr_names = list(np.loadtxt(datafile, delimiter=',', comments='#',      \
+                                                    usecols=(0,), dtype=str))
     print('\nI: Loaded ChIP-seq peak data from ' + datafile)
 
     # Count number of peaks for each chromosome
     chr_peak_cnt = {}
     for chr_name in chr_names:
-        if chr_name[0] != 'G' and not chr_peak_cnt.has_key(chr_name):
+        if chr_name[0] not in ('c', 'G', '"') and not chr_peak_cnt.has_key(chr_name):
             chr_peak_cnt[chr_name] = chr_names.count(chr_name)
 
     # Save chromosome peak counts to a file
