@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 #
-# Copyright (c) 2012, Regents of the University of California
+# Copyright (c) 2014, Regents of the University of California
 # All rights reserved.
 #
 # Redistribution and use in source and binary forms, with or without
@@ -28,46 +28,44 @@
 # POSSIBILITY OF SUCH DAMAGE.
 #
 #
-# Count ChIP-seq peaks
+# Color grayscale images
 #
 # by Fernando L. Garcia Bermudez
 #
-# created on 2012-5-9
+# created on 2014-1-4
 #
 
-import os, sys, time, traceback, numpy as np
-
+import sys, os, traceback
+import numpy as np, matplotlib.image as mpim
 
 def main():
 
+    global filename
+
     # Check and parse arguments
     if len(sys.argv) < 2:
-        print("Not enough arguments given. Need full path for the data file.")
+        print("Not enough arguments given. Need full path for the image file.")
         sys.exit()
+    source = sys.argv[1]
 
-    # Load dataset
-    name      = os.path.splitext(sys.argv[1])[0]
-    ext       = os.path.splitext(sys.argv[1])[1]
-    datafile  = name + ext
-    chr_names = list(np.loadtxt(datafile, delimiter=',', comments='#',      \
-                                                    usecols=(0,), dtype=str))
-    print('\nI: Loaded ChIP-seq peak data from ' + datafile)
+    im_colors = { 'r':0, 'g':1, 'b':2}
 
-    # Count number of peaks for each chromosome
-    chr_peak_cnt = {}
-    for chr_name in chr_names:
-        if chr_name[0] not in ('c', 'G', '"') and not chr_peak_cnt.has_key(chr_name):
-            chr_peak_cnt[chr_name] = chr_names.count(chr_name)
+    for filename in os.listdir(source):
+        filepath = source + filename
+        if os.path.splitext(filepath)[1] == '.jpg':
 
-    # Save chromosome peak counts to a file
-    dt_str          = time.strftime('%Y.%m.%d_%H.%M.%S', time.localtime())
-    resultsfile = name + '_peak_cnt_' + dt_str + ext
-    outfile = open(resultsfile,'w')
-    outfile.write('chr,peak_cnt\n')
-    outfile.close()
-    np.savetxt(open(resultsfile , 'a'), np.array(chr_peak_cnt.items(), \
-                                         dtype='|S10'), '%s', delimiter = ',')
-    print('I: Saved chromosome peak counts to ' + resultsfile)
+            # Load image
+            im       = mpim.imread(filepath)
+            im_color = im_colors[filename[-5]]
+
+            # Switch color channel
+            rows, cols               = im.shape
+            im_colored               = np.zeros((rows, cols, 3))
+            im_colored[:,:,im_color] = im / 255.
+
+            # Save colored image
+            mpim.imsave(os.path.splitext(filepath)[0] + '.png', im_colored,
+                                                                format='PNG')
 
 if __name__ == '__main__':
     try:
