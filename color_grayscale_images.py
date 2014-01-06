@@ -40,8 +40,6 @@ import numpy as np, matplotlib.image as mpim
 
 def main():
 
-    global filename
-
     # Check and parse arguments
     if len(sys.argv) < 2:
         print("Not enough arguments given. Need full path for the image file.")
