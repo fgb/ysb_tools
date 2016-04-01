@@ -9,3 +9,9 @@ ChIP-seq peak counter
 
     # Run script on the relevant dataset, including the full datapath
     python chipseq_peak_counter.py "~\Desktop\chip-seq peaks\358-361\358peaks.csv"
+    
+RNA-seq ChIP-seq filter
+-----------------------
+
+    # run the script on the relevant datasets
+    python rnaseq_chipseq_filter.py [rna_seq_data] [chip_seq_data] [results.csv]
