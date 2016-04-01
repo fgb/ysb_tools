@@ -30,7 +30,7 @@
 #
 # Count ChIP-seq peaks
 #
-# by Fernando L. Garcia Bermudez
+# by Fernando L. Garcia Bermudez & Yanina S. Bogliotti
 #
 # created on 2012-5-9
 #

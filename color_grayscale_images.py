@@ -30,7 +30,7 @@
 #
 # Color grayscale images
 #
-# by Fernando L. Garcia Bermudez
+# by Fernando L. Garcia Bermudez & Yanina S. Bogliotti
 #
 # created on 2014-1-4
 #
