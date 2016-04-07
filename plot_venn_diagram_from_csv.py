@@ -28,48 +28,53 @@
 # POSSIBILITY OF SUCH DAMAGE.
 #
 #
-# Filter RNA-seq data using ChIP-seq peaks
+# Plot 3-way Venn diagram from sets stored in csv file
 #
 # by Fernando L. Garcia Bermudez & Yanina S. Bogliotti
 #
-# created on 2016-2-9
+# created on 2016-4-6
 #
 
 import sys, os, traceback, csv
+from matplotlib import pyplot as plt
+from matplotlib_venn import venn3
 
 
 def main():
 
     # check and parse arguments
-    if len(sys.argv) < 4:
-        print("Not enough arguments given. Need full paths for the RNA-seq data file, the ChIP-seq data file, and the CSV where you'd like to store the results.")
+    if len(sys.argv) < 3:
+        print("Not enough arguments given. Need csv with data on the 3 sets to plot and the filename of the output png.")
         sys.exit()
 
-    rna_seq  = sys.argv[1]
-    chip_seq = sys.argv[2]
-    result   = sys.argv[3]
+    sets   = sys.argv[1]
+    output = sys.argv[2]
 
-    # perform filtering
-    d = {}
-    r = {}
+    # load sets
+    with open( sets, 'U' ) as sfile:
+        sreader = csv.reader( sfile )
 
-    with open( rna_seq, 'U' ) as dfile:
-        dreader = csv.reader( dfile )
-        for row in dreader:
-            if d.has_key( row[0] ):
-                print( row[0] + ' is repeated!' )
-            d[ row[0] ] = row[1]
+        header = sreader.next() # store field names
 
-    with open( chip_seq, 'U' ) as lfile, open( result, 'w') as ofile:
-        lreader = csv.reader( lfile )
-        owriter = csv.writer( ofile )
-        for row in lreader:
-            if d.has_key( row[0] ):
-                r[ row[0] ] = float( d[ row[0] ] )
-            else:
-                r[ row[0] ] = ''
+        s0 = set()
+        s1 = set()
+        s2 = set()
+        for row in sreader:
+            # if csv entry is not empty, add it to relevant set
+            if row[0]:
+                s0.add( row[0] )
+            if row[1]:
+                s1.add( row[1] )
+            if row[2]:
+                s2.add( row[2] )
 
-            owriter.writerow( [ row[0], r[ row[0] ] ] )
+    # plot venn diagram
+    fig = plt.figure()
+
+    venn3( subsets=(s0, s1, s2), set_labels=header )
+
+    fig.savefig( output, format='PNG')
+
 
 if __name__ == '__main__':
     try:

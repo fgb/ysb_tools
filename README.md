@@ -4,14 +4,14 @@ YSB Tools
 ChIP-seq peak counter
 ---------------------
 
-    # change directory to where the script lives
-    cd "C:\Users\yanina\Desktop\chip-seq peaks\"
-
-    # run script on the relevant dataset, including the full datapath
-    python chipseq_peak_counter.py "~\Desktop\chip-seq peaks\358-361\358peaks.csv"
+    python chipseq_peak_counter.py [peaks_data]
 
 RNA-seq ChIP-seq filter
 -----------------------
 
-    # run the script on the relevant datasets
     python rnaseq_chipseq_filter.py [rna_seq_data] [chip_seq_data] [results.csv]
+
+Plot Venn diagram from CSV
+--------------------------
+
+	python plot_venn_diagram_from_csv.py [sets_data] [diagram.png]
