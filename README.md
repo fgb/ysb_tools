@@ -14,4 +14,4 @@ RNA-seq ChIP-seq filter
 Plot Venn diagram from CSV
 --------------------------
 
-	python plot_venn_diagram_from_csv.py [sets_data] [diagram.png]
+	python plot_venn_diagram_from_csv.py [sets_data.csv] [diagram.png]

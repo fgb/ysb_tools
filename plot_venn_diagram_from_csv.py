@@ -28,7 +28,7 @@
 # POSSIBILITY OF SUCH DAMAGE.
 #
 #
-# Plot 3-way Venn diagram from sets stored in csv file
+# Plot 2- and 3-way Venn diagrams from sets stored in csv file
 #
 # by Fernando L. Garcia Bermudez & Yanina S. Bogliotti
 #
@@ -37,14 +37,14 @@
 
 import sys, os, traceback, csv
 from matplotlib import pyplot as plt
-from matplotlib_venn import venn3
+from matplotlib_venn import venn2, venn3
 
 
 def main():
 
     # check and parse arguments
     if len(sys.argv) < 3:
-        print("Not enough arguments given. Need csv with data on the 3 sets to plot and the filename of the output png.")
+        print("Not enough arguments given. Need csv with data on the sets to plot and the filename of the output png.")
         sys.exit()
 
     sets   = sys.argv[1]
@@ -54,24 +54,31 @@ def main():
     with open( sets, 'U' ) as sfile:
         sreader = csv.reader( sfile )
 
-        header = sreader.next() # store field names
+        # store field names
+        header = sreader.next()
 
-        s0 = set()
-        s1 = set()
-        s2 = set()
+        # handle plotting of 2- and 3-way venn diagrams
+        n_sets = len(header)
+        if n_sets == 2:
+            sets = ( set(), set() )
+            venn = venn2
+        elif n_sets == 3:
+            sets = ( set(), set(), set() )
+            venn = venn3
+        else:
+            print("Wrong number of sets: " + str(n_sets) + ". Can only plot a 2-way or 3-way venn diagram!")
+            sys.exit()
+
+        # add non-empty csv entries to sets
         for row in sreader:
-            # if csv entry is not empty, add it to relevant set
-            if row[0]:
-                s0.add( row[0] )
-            if row[1]:
-                s1.add( row[1] )
-            if row[2]:
-                s2.add( row[2] )
+            for i in range( n_sets ):
+                if row[i]:
+                    sets[i].add( row[i] )
 
     # plot venn diagram
     fig = plt.figure()
 
-    venn3( subsets=(s0, s1, s2), set_labels=header )
+    venn( subsets=sets, set_labels=header )
 
     fig.savefig( output, format='PNG')
 
