@@ -64,12 +64,13 @@ def main():
         lreader = csv.reader( lfile )
         owriter = csv.writer( ofile )
         for row in lreader:
-            if d.has_key( row[0] ):
-                r[ row[0] ] = float( d[ row[0] ] )
-            else:
-                r[ row[0] ] = ''
+            if row:
+                if d.has_key( row[0] ):
+                    r[ row[0] ] = float( d[ row[0] ] )
+                else:
+                    r[ row[0] ] = ''
 
-            owriter.writerow( [ row[0], r[ row[0] ] ] )
+                owriter.writerow( [ row[0], r[ row[0] ] ] )
 
 if __name__ == '__main__':
     try:
