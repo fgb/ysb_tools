@@ -44,11 +44,13 @@ def main():
 
     # check and parse arguments
     if len(sys.argv) < 3:
-        print("Not enough arguments given. Need csv with data on the sets to plot and the filename of the output png.")
+        print("Not enough arguments given. Need csv with data on the sets to plot and the filename of the output png or pdf.")
         sys.exit()
 
     sets   = sys.argv[1]
     output = sys.argv[2]
+
+    colors = ('b', 'g', 'r')
 
     # load sets
     with open( sets, 'U' ) as sfile:
@@ -78,9 +80,9 @@ def main():
     # plot venn diagram
     fig = plt.figure()
 
-    venn( subsets=sets, set_labels=header )
+    v = venn( subsets=sets, set_labels=header, set_colors=colors[:n_sets] )
 
-    fig.savefig( output, format='PNG')
+    fig.savefig( output )
 
 
 if __name__ == '__main__':
