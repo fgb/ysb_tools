@@ -57,10 +57,10 @@ def main():
         dreader = csv.reader( dfile )
         for row in dreader:
             if not d.has_key( row[0] ):
-                d[ row[0] ] = [ float( row[1] ) ]
+                d[ row[0] ] = [ row[1] ]
             else:
                 print( row[0] + ' is repeated!' )
-                d[ row[0] ].append( float( row[1] ) )
+                d[ row[0] ].append( row[1] )
 
     with open( chip_seq, 'U' ) as lfile, open( result, 'w') as ofile:
         lreader = csv.reader( lfile )
