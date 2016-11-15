@@ -56,9 +56,11 @@ def main():
     with open( rna_seq, 'U' ) as dfile:
         dreader = csv.reader( dfile )
         for row in dreader:
-            if d.has_key( row[0] ):
+            if not d.has_key( row[0] ):
+                d[ row[0] ] = [ float( row[1] ) ]
+            else:
                 print( row[0] + ' is repeated!' )
-            d[ row[0] ] = row[1]
+                d[ row[0] ].append( float( row[1] ) )
 
     with open( chip_seq, 'U' ) as lfile, open( result, 'w') as ofile:
         lreader = csv.reader( lfile )
@@ -66,11 +68,11 @@ def main():
         for row in lreader:
             if row:
                 if d.has_key( row[0] ):
-                    r[ row[0] ] = float( d[ row[0] ] )
+                    r[ row[0] ] = d[ row[0] ]
                 else:
                     r[ row[0] ] = ''
 
-                owriter.writerow( [ row[0], r[ row[0] ] ] )
+                owriter.writerow( [ row[0] ] + r[ row[0] ] )
 
 if __name__ == '__main__':
     try:
